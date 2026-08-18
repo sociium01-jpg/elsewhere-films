@@ -1,0 +1,85 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body {
+  @apply bg-ink-black font-body text-ink-white antialiased;
+}
+
+body {
+  letter-spacing: 0.06em;
+  line-height: 1.9;
+  font-weight: 300;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  @apply font-display font-bold;
+}
+
+@media (max-width: 767px) {
+  h1,
+  h2,
+  h3 {
+    letter-spacing: 0.08em;
+  }
+}
+
+@media (min-width: 768px) {
+  h1,
+  h2,
+  h3 {
+    letter-spacing: 0.12em;
+  }
+}
+
+::selection {
+  background-color: theme("colors.brand.red");
+  color: theme("colors.ink.white");
+}
+
+:focus-visible {
+  outline: 2px solid theme("colors.brand.red");
+  outline-offset: 3px;
+}
+
+@keyframes grain-shift {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  25% {
+    transform: translate3d(-2%, 1%, 0);
+  }
+  50% {
+    transform: translate3d(1%, -2%, 0);
+  }
+  75% {
+    transform: translate3d(-1%, 2%, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.grain-shift {
+  animation: grain-shift 1.6s steps(2) infinite;
+}
+
+@keyframes draw-svg {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grain-shift {
+    animation: none;
+  }
+}
