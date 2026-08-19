@@ -16,7 +16,7 @@ export function KenBurns({
   children,
   className,
   reverse = false,
-  durationSec = 12,
+  durationSec = 18,
 }: KenBurnsProps) {
   const reduce = useReducedMotion();
   const desktop = useMinWidth(768);
@@ -28,8 +28,8 @@ export function KenBurns({
   return (
     <motion.div
       className={cn("relative h-full w-full will-change-transform", className)}
-      initial={{ scale: reverse ? 1.08 : 1 }}
-      animate={{ scale: reverse ? 1 : 1.08 }}
+      initial={{ scale: reverse ? 1.12 : 1.06 }}
+      animate={{ scale: reverse ? 1.02 : 1.14 }}
       transition={{
         duration: durationSec,
         ease: "linear",

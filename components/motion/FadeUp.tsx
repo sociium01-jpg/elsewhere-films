@@ -9,7 +9,7 @@ type FadeUpProps = {
   children: ReactNode;
   className?: string;
   delay?: number;
-  as?: "p" | "div" | "span";
+  as?: "p" | "div" | "span" | "li";
 };
 
 export function FadeUp({

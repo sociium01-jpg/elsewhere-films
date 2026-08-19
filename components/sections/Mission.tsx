@@ -2,6 +2,8 @@
 
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
+import { ChevronMark } from "@/components/brand/ChevronMark";
+import { DrawSVG } from "@/components/motion/DrawSVG";
 import { FadeUp } from "@/components/motion/FadeUp";
 import { MaskReveal } from "@/components/motion/MaskReveal";
 import { useMinWidth } from "@/lib/use-min-width";
@@ -55,17 +57,22 @@ export function Mission() {
         {reduce || !desktop ? (
           <span
             aria-hidden
-            className="pointer-events-none absolute -right-8 top-1/2 -translate-y-1/2 font-display text-[280px] font-bold leading-none text-ink-black/[0.08] md:text-[360px]"
+            className="pointer-events-none absolute -right-8 top-1/2 -translate-y-1/2 text-ink-black/[0.08]"
           >
-            ^
+            <ChevronMark className="h-[280px] w-[320px] md:h-[360px] md:w-[400px]" />
           </span>
         ) : (
           <motion.span
             aria-hidden
             style={{ y, opacity }}
-            className="pointer-events-none absolute -right-10 top-[8%] font-display text-[360px] font-bold leading-none text-ink-black lg:text-[440px]"
+            className="pointer-events-none absolute -right-10 top-[8%] text-ink-black"
           >
-            ^
+            <DrawSVG durationSec={1.6}>
+              <ChevronMark
+                filled={false}
+                className="h-[360px] w-[400px] lg:h-[440px] lg:w-[480px]"
+              />
+            </DrawSVG>
           </motion.span>
         )}
       </div>

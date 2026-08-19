@@ -2,7 +2,9 @@
 
 import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
+import { CurtainWipe } from "@/components/motion/CurtainWipe";
 import { FadeUp } from "@/components/motion/FadeUp";
+import { ImageReveal } from "@/components/motion/ImageReveal";
 import { MaskReveal } from "@/components/motion/MaskReveal";
 import { ParallaxImage } from "@/components/motion/ParallaxImage";
 
@@ -95,21 +97,25 @@ function LightCone() {
 export function Vision() {
   return (
     <section
-      id="vision"
+      id="about"
       className="relative overflow-hidden bg-ink-charcoal"
       aria-labelledby="vision-heading"
     >
       <div className="mx-auto grid max-w-frame items-center gap-10 px-5 py-16 md:grid-cols-2 md:gap-8 md:px-10 md:py-0 lg:px-14">
-        <ParallaxImage className="relative aspect-[4/3] md:aspect-auto md:h-[560px] lg:h-[640px]">
-          <Image
-            src="/images/vision-projector.webp"
-            alt="Film projector throwing a beam of light"
-            fill
-            sizes="(max-width: 768px) 100vw, 50vw"
-            className="object-cover object-left"
-          />
-          <LightCone />
-        </ParallaxImage>
+        <ImageReveal className="relative aspect-[4/3] md:aspect-auto md:h-[560px] lg:h-[640px]">
+          <CurtainWipe className="h-full w-full">
+            <ParallaxImage className="relative h-full min-h-[280px] md:min-h-[560px] lg:min-h-[640px]">
+              <Image
+                src="/images/vision-projector.webp"
+                alt="Film projector throwing a beam of light"
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className="object-cover object-left"
+              />
+              <LightCone />
+            </ParallaxImage>
+          </CurtainWipe>
+        </ImageReveal>
 
         <div className="relative z-10 max-w-[540px] pb-4 md:py-24">
           <MaskReveal

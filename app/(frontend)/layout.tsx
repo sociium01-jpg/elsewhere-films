@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     "A film isn't finished when the credits roll. It's finished when it finds its audience.",
 };
 
-export default function RootLayout({
+export default function FrontendLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;

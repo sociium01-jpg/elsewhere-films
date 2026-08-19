@@ -15,8 +15,9 @@ export function SmoothScroll() {
     if (reduce) return;
 
     const lenis = new Lenis({
-      duration: 1.1,
+      duration: 1.35,
       smoothWheel: true,
+      wheelMultiplier: 0.88,
     });
 
     lenis.on("scroll", ScrollTrigger.update);
@@ -27,6 +28,7 @@ export function SmoothScroll() {
 
     gsap.ticker.add(ticker);
     gsap.ticker.lagSmoothing(0);
+    requestAnimationFrame(() => ScrollTrigger.refresh());
 
     return () => {
       gsap.ticker.remove(ticker);

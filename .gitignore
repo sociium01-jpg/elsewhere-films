@@ -11,11 +11,19 @@
 # netlify
 .netlify
 
+# Payload local media fallback (used when S3 env vars are missing)
+/media
+
 # misc
 .DS_Store
 *.pem
 npm-debug.log*
-.env*.local
+
+# env — never commit real secrets
+.env
+.env.*
+!.env.example
 
 # design extraction (not for production)
 /_ref
+/.design-ref

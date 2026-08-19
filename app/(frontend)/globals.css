@@ -11,6 +11,10 @@ body {
   @apply bg-ink-black font-body text-ink-white antialiased;
 }
 
+html {
+  scroll-padding-top: 5.5rem;
+}
+
 body {
   letter-spacing: 0.06em;
   line-height: 1.9;
@@ -69,7 +73,24 @@ h4 {
 }
 
 .grain-shift {
-  animation: grain-shift 1.6s steps(2) infinite;
+  animation: grain-shift 2.4s steps(3) infinite;
+}
+
+@keyframes film-scratch {
+  0%,
+  92%,
+  100% {
+    opacity: 0;
+  }
+  93% {
+    opacity: 0.07;
+  }
+  94% {
+    opacity: 0;
+  }
+  96% {
+    opacity: 0.05;
+  }
 }
 
 @keyframes draw-svg {
