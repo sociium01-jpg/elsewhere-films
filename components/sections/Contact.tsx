@@ -54,7 +54,7 @@ export function Contact() {
       />
       <div aria-hidden className="absolute inset-0 bg-ink-black/45" />
 
-      <div className="relative mx-auto max-w-frame px-5 py-16 md:px-10 md:py-20 lg:px-14">
+      <div className="relative z-10 mx-auto max-w-frame px-5 py-16 md:px-10 md:py-20 lg:px-14">
         <AnimatedHeading
           as="h2"
           id="contact-heading"

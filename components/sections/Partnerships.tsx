@@ -34,7 +34,7 @@ export function Partnerships() {
         <DashedRule className="mt-3" />
 
         <div className="mt-10 grid overflow-hidden md:grid-cols-2">
-          <FadeUp className="relative flex flex-col">
+          <FadeUp offset={false} className="relative flex flex-col">
             <div className="relative aspect-[16/10] overflow-hidden">
               <Image
                 src="/images/partnership-pathway.webp"
@@ -62,7 +62,7 @@ export function Partnerships() {
             </div>
           </FadeUp>
 
-          <FadeUp delay={0.1} className="relative flex flex-col">
+          <FadeUp offset={false} delay={0.1} className="relative flex flex-col">
             <div className="relative aspect-[16/10] overflow-hidden">
               <Image
                 src="/images/partnership-creative.webp"

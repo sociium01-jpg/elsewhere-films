@@ -2,7 +2,8 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/cn";
-import { duration, easeEnter, stagger, viewportOnce } from "@/lib/motion";
+import { duration, easeEnter, stagger } from "@/lib/motion";
+import { useReveal } from "@/lib/use-reveal";
 
 type MaskRevealProps = {
   lines: string[];
@@ -22,22 +23,22 @@ export function MaskReveal({
   id,
 }: MaskRevealProps) {
   const reduce = useReducedMotion();
+  const { ref, visible } = useReveal(reduce);
   const Tag = motion[as];
 
   return (
-    <Tag id={id} className={cn(className)}>
+    <Tag id={id} ref={ref} className={cn("leading-tight", className)}>
       {lines.map((line, index) => {
         const lineStyles = Array.isArray(lineClassName)
           ? lineClassName[index]
           : lineClassName;
 
         return (
-          <span key={`${line}-${index}`} className="block overflow-hidden">
+          <span key={`${line}-${index}`} className="block overflow-hidden py-[0.08em]">
             <motion.span
               className={cn("block", lineStyles)}
-              initial={reduce ? false : { y: "110%" }}
-              whileInView={reduce ? undefined : { y: "0%" }}
-              viewport={viewportOnce}
+              initial={reduce ? false : { y: "100%" }}
+              animate={reduce || visible ? { y: "0%" } : { y: "100%" }}
               transition={{
                 duration: duration.text,
                 ease: easeEnter,

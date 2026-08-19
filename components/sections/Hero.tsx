@@ -16,6 +16,8 @@ export function Hero() {
 
   useEffect(() => {
     if (reduce) setBoxDone(true);
+    const id = window.setTimeout(() => setBoxDone(true), reduce ? 0 : 2200);
+    return () => window.clearTimeout(id);
   }, [reduce]);
 
   return (
