@@ -5,7 +5,11 @@ import { Providers } from "./providers";
 export const metadata: Metadata = {
   title: "Elsewhere Films",
   description:
-    "A film isn't finished when the credits roll. It's finished when it finds its audience.",
+    "You made the film. We help it travel. A pathway for South Asian independent cinema after the cut.",
+  icons: {
+    icon: "/brand/elsewhere-logo.svg",
+    apple: "/brand/elsewhere-logo.svg",
+  },
 };
 
 export default function FrontendLayout({

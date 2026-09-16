@@ -21,10 +21,10 @@ export const viewportOnce = {
 } as const;
 
 export const fadeUp = {
-  hidden: { opacity: 0, y: 24 },
+  hidden: { opacity: 0, y: 12 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: duration.text, ease: easeEnter },
+    transition: { duration: 0.5, ease: easeEnter },
   },
 } as const;

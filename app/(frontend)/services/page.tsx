@@ -1,28 +1,24 @@
 import type { Metadata } from "next";
-import { PageHero } from "@/components/layout/PageHero";
 import { SiteFrame } from "@/components/layout/SiteFrame";
-import { FilmStages } from "@/components/sections/FilmStages";
-import { Partnerships } from "@/components/sections/Partnerships";
+import { EngagementClose } from "@/components/sections/EngagementClose";
+import { JourneyLocator } from "@/components/sections/JourneyLocator";
+import { ScopeDetail } from "@/components/sections/ScopeDetail";
+import { TwoWays } from "@/components/sections/TwoWays";
 
 export const metadata: Metadata = {
   title: "Services — Elsewhere Films",
   description:
-    "Every film has its journey. Tell us yours. Pathway partnership and creative partnership.",
+    "Where is your film on its journey? Pathway partnership and creative partnership.",
 };
 
 export default function ServicesPage() {
   return (
     <SiteFrame>
       <main>
-        <PageHero
-          eyebrow="Services"
-          title={"EVERY FILM HAS\nITS JOURNEY."}
-          subtitle="You made the film. Now comes the journey no one hands you a map for: Festivals, Markets, Partners, Distributors, Audiences."
-          image="/images/stage-festival.webp"
-          imageAlt="Audience recording a screening on a phone"
-        />
-        <FilmStages />
-        <Partnerships />
+        <JourneyLocator />
+        <TwoWays />
+        <ScopeDetail />
+        <EngagementClose />
       </main>
     </SiteFrame>
   );

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Wordmark } from "@/components/layout/Wordmark";
+import { ConversationButton } from "@/components/layout/ConversationButton";
 import { cn } from "@/lib/cn";
 import { duration, easeEnter, stagger } from "@/lib/motion";
 import { NAV_LINKS } from "@/lib/nav";
@@ -89,6 +90,9 @@ export function Navbar() {
               </Link>
             </li>
           ))}
+          <li className="ml-6">
+            <ConversationButton />
+          </li>
         </ul>
 
         <button
@@ -180,6 +184,12 @@ export function Navbar() {
                   );
                 })}
               </ul>
+              <div className="px-8 pb-4">
+                <ConversationButton
+                  className="text-left"
+                  onAfterOpen={() => setOpen(false)}
+                />
+              </div>
               <p className="px-8 pb-7 font-body text-[11px] font-light tracking-body text-ink-grey">
                 Swipe up to close
               </p>
