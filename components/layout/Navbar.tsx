@@ -50,7 +50,7 @@ export function Navbar() {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.6, ease: easeEnter, delay: 0.35 }}
       className={cn(
-        "fixed inset-x-0 top-0 z-50 transition-[background-color,backdrop-filter] duration-500",
+        "fixed inset-x-0 top-0 z-50 pt-[env(safe-area-inset-top)] transition-[background-color,backdrop-filter] duration-500",
         open || scrolled ? "bg-ink-black/95 backdrop-blur-md" : "bg-transparent",
       )}
     >
@@ -76,7 +76,7 @@ export function Navbar() {
               ) : null}
               <Link
                 href={link.href}
-                className="group relative py-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-red"
+                className="group relative inline-flex min-h-11 items-center py-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-red"
               >
                 {link.label}
                 <span
@@ -143,7 +143,7 @@ export function Navbar() {
               if (info.offset.y < -72 || info.velocity.y < -400) setOpen(false);
             }}
           >
-            <div className="flex max-h-[calc(100dvh-4.5rem)] flex-col overflow-hidden rounded-b-3xl border-t border-ink-white/10 bg-ink-black shadow-[0_24px_60px_rgba(0,0,0,0.45)]">
+            <div className="flex max-h-[calc(100dvh-4.5rem-env(safe-area-inset-top))] flex-col overflow-hidden rounded-b-3xl border-t border-ink-white/10 bg-ink-black pb-[env(safe-area-inset-bottom)] shadow-[0_24px_60px_rgba(0,0,0,0.45)]">
               <div className="flex justify-center pb-1 pt-3" aria-hidden>
                 <span className="h-1 w-10 rounded-full bg-ink-white/25" />
               </div>

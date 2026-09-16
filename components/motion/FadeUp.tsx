@@ -12,6 +12,7 @@ type FadeUpProps = {
   delay?: number;
   as?: "p" | "div" | "span" | "li";
   offset?: boolean;
+  grouped?: boolean;
 };
 
 export function FadeUp({
@@ -20,19 +21,41 @@ export function FadeUp({
   delay = 0,
   as = "div",
   offset = true,
+  grouped = false,
 }: FadeUpProps) {
   const reduce = useReducedMotion();
-  const { ref, visible } = useReveal(reduce);
+  const { ref, visible } = useReveal(grouped ? true : reduce);
   const Tag = motion[as];
   const hidden = offset ? fadeUp.hidden : { opacity: 0 };
-  const shown = offset ? fadeUp.visible : { opacity: 1 };
+  const shown = offset ? { opacity: 1, y: 0 } : { opacity: 1 };
+
+  if (reduce) {
+    return <Tag className={cn(className)}>{children}</Tag>;
+  }
+
+  if (grouped) {
+    return (
+      <Tag
+        className={cn(className)}
+        variants={{
+          hidden,
+          visible: {
+            ...shown,
+            transition: { duration: duration.text, ease: easeEnter, delay },
+          },
+        }}
+      >
+        {children}
+      </Tag>
+    );
+  }
 
   return (
     <Tag
       ref={ref}
       className={cn(className)}
-      initial={reduce ? false : hidden}
-      animate={reduce || visible ? shown : hidden}
+      initial={hidden}
+      animate={visible ? shown : hidden}
       transition={{ duration: duration.text, ease: easeEnter, delay }}
     >
       {children}

@@ -2,19 +2,25 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import { usePathname } from "next/navigation";
-import type { ReactNode } from "react";
-import { easeEnter } from "@/lib/motion";
+import { useEffect, useState, type ReactNode } from "react";
+import { duration, easeEnter } from "@/lib/motion";
 
 export function PageFade({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const reduce = useReducedMotion();
+  const [ms, setMs] = useState(duration.page);
+
+  useEffect(() => {
+    const fine = window.matchMedia("(pointer: fine)").matches;
+    setMs(fine ? duration.page : 0.18);
+  }, []);
 
   return (
     <motion.div
       key={pathname}
       initial={reduce ? false : { opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 0.28, ease: easeEnter }}
+      transition={{ duration: ms, ease: easeEnter }}
     >
       {children}
     </motion.div>

@@ -103,4 +103,8 @@ h4 {
   .grain-shift {
     animation: none;
   }
+
+  html {
+    scroll-behavior: auto;
+  }
 }

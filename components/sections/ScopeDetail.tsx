@@ -1,5 +1,6 @@
 import { OfferingMark } from "@/components/brand/OfferingMark";
 import { FadeUp } from "@/components/motion/FadeUp";
+import { RevealGroup } from "@/components/motion/RevealGroup";
 import { OFFERINGS_SCOPE } from "@/lib/copy";
 
 export function ScopeDetail() {
@@ -15,9 +16,9 @@ export function ScopeDetail() {
           </h2>
         </FadeUp>
 
-        <div className="mt-14 space-y-14">
+        <RevealGroup className="mt-14 space-y-14">
           {OFFERINGS_SCOPE.map((offering, index) => (
-            <FadeUp key={offering.name} delay={index * 0.04}>
+            <FadeUp key={offering.name} grouped>
               <article className="grid gap-4 md:grid-cols-[100px_1fr] md:gap-12">
                 <div className="text-brand-red">
                   <p className="font-display text-[12px] font-semibold tracking-[0.18em]">
@@ -36,7 +37,7 @@ export function ScopeDetail() {
               </article>
             </FadeUp>
           ))}
-        </div>
+        </RevealGroup>
       </div>
     </section>
   );

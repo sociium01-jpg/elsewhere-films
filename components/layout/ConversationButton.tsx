@@ -25,7 +25,7 @@ export function ConversationButton({
         onAfterOpen?.();
       }}
       className={cn(
-        "font-display text-[11px] font-semibold uppercase tracking-[0.22em] transition-opacity hover:opacity-70",
+        "inline-flex min-h-11 items-center font-display text-[11px] font-semibold uppercase tracking-[0.22em] transition-opacity hover:opacity-70",
         variant === "dark" && "text-ink-white",
         variant === "light" && "text-ink-charcoal",
         variant === "solid" &&

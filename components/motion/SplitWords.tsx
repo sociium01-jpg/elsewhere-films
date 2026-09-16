@@ -15,35 +15,30 @@ export function SplitWords({
   text,
   className,
   delay = 0,
-  stagger = 0.045,
+  stagger = 0.03,
 }: SplitWordsProps) {
   const reduce = useReducedMotion();
   const { ref, visible } = useReveal(reduce);
   const words = text.split(" ");
+  const shown = reduce || visible;
 
   return (
     <span ref={ref} className={className}>
       {words.map((word, index) => (
-        <span
+        <motion.span
           key={`${word}-${index}`}
-          className="inline-block overflow-hidden align-baseline leading-[1.35]"
+          className="inline-block"
+          initial={reduce ? false : { opacity: 0, y: 8 }}
+          animate={shown ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 }}
+          transition={{
+            duration: duration.text,
+            ease: easeEnter,
+            delay: delay + index * stagger,
+          }}
         >
-          <motion.span
-            className="inline-block will-change-transform"
-            initial={reduce ? false : { y: "105%", opacity: 0 }}
-            animate={
-              reduce || visible ? { y: "0%", opacity: 1 } : { y: "105%", opacity: 0 }
-            }
-            transition={{
-              duration: duration.text,
-              ease: easeEnter,
-              delay: delay + index * stagger,
-            }}
-          >
-            {word}
-            {index < words.length - 1 ? "\u00A0" : ""}
-          </motion.span>
-        </span>
+          {word}
+          {index < words.length - 1 ? "\u00A0" : ""}
+        </motion.span>
       ))}
     </span>
   );

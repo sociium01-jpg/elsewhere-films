@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { FadeUp } from "@/components/motion/FadeUp";
 import { StillCaption } from "@/components/layout/StillCaption";
+import { RevealGroup } from "@/components/motion/RevealGroup";
 import { SERVICES } from "@/lib/copy";
 
 const STAGE_STILLS = [
@@ -35,10 +36,10 @@ export function JourneyLocator() {
           </h1>
         </FadeUp>
 
-        <ul className="mt-12 grid gap-4 md:grid-cols-3">
+        <RevealGroup as="ul" className="mt-12 grid gap-4 md:grid-cols-3">
           {SERVICES.journey.stages.map((stage, index) => (
-            <FadeUp key={stage.id} delay={index * 0.06} as="li">
-              <article className="flex h-full flex-col bg-ink-white transition-transform duration-300 ease-enter hover:-translate-y-1">
+            <FadeUp key={stage.id} grouped as="li">
+              <article className="flex h-full flex-col bg-ink-white md:transition-transform md:duration-300 md:ease-enter md:hover:-translate-y-1">
                 <div className="relative aspect-[16/10] overflow-hidden">
                   <Image
                     src={STAGE_STILLS[index].image}
@@ -60,7 +61,7 @@ export function JourneyLocator() {
               </article>
             </FadeUp>
           ))}
-        </ul>
+        </RevealGroup>
 
         <FadeUp delay={0.2} className="mt-6">
           <article className="border border-dashed border-ink-charcoal/35 bg-transparent px-6 py-8 md:px-10">
@@ -72,7 +73,7 @@ export function JourneyLocator() {
             </p>
             <Link
               href="#creative-partnership"
-              className="mt-5 inline-block font-display text-[11px] font-semibold uppercase tracking-[0.16em] text-ink-charcoal underline decoration-brand-red decoration-1 underline-offset-8"
+              className="mt-5 inline-flex min-h-11 items-center font-display text-[11px] font-semibold uppercase tracking-[0.16em] text-ink-charcoal underline decoration-brand-red decoration-1 underline-offset-8"
             >
               Creative Partnership →
             </Link>

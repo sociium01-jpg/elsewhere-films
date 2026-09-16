@@ -2,6 +2,7 @@
 
 import { ConversationButton } from "@/components/layout/ConversationButton";
 import { FadeUp } from "@/components/motion/FadeUp";
+import { RevealGroup } from "@/components/motion/RevealGroup";
 import { SERVICES } from "@/lib/copy";
 
 export function TwoWays() {
@@ -20,8 +21,8 @@ export function TwoWays() {
           </h2>
         </FadeUp>
 
-        <div className="mt-12 grid gap-4 lg:grid-cols-5">
-          <FadeUp className="lg:col-span-3">
+        <RevealGroup className="mt-12 grid gap-4 lg:grid-cols-5">
+          <FadeUp grouped className="lg:col-span-3">
             <article className="flex h-full flex-col border-l-2 border-brand-red bg-ink-charcoal px-8 py-10 text-ink-white md:px-12 md:py-14">
               <h3 className="font-display text-[20px] font-bold uppercase tracking-caps md:text-[24px]">
                 {SERVICES.twoWays.pathway.title}
@@ -32,7 +33,7 @@ export function TwoWays() {
             </article>
           </FadeUp>
 
-          <FadeUp delay={0.08} className="lg:col-span-2" offset={false}>
+          <FadeUp grouped className="lg:col-span-2" offset={false}>
             <article
               id="creative-partnership"
               className="flex h-full flex-col bg-ink-offWhite px-8 py-10 md:px-10 md:py-14"
@@ -45,7 +46,7 @@ export function TwoWays() {
               </p>
             </article>
           </FadeUp>
-        </div>
+        </RevealGroup>
 
         <div className="mt-12">
           <ConversationButton variant="solid" />

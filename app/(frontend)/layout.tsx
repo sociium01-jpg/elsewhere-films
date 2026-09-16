@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Providers } from "./providers";
 
@@ -10,6 +10,12 @@ export const metadata: Metadata = {
     icon: "/brand/elsewhere-logo.svg",
     apple: "/brand/elsewhere-logo.svg",
   },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
 };
 
 export default function FrontendLayout({

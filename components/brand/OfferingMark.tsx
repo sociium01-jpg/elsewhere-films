@@ -4,7 +4,7 @@ import { DrawSVG } from "@/components/motion/DrawSVG";
 
 export function OfferingMark({ delay = 0 }: { delay?: number }) {
   return (
-    <DrawSVG durationSec={0.7} delay={delay} className="mt-3 flex h-4 items-center">
+    <DrawSVG durationSec={0.45} delay={delay} className="mt-3 flex h-4 items-center">
       <svg viewBox="0 0 32 2" className="h-[2px] w-8 overflow-visible" aria-hidden>
         <line
           x1="0"

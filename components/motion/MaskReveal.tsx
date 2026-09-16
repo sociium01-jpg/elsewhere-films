@@ -12,6 +12,8 @@ type MaskRevealProps = {
   lineClassName?: string | string[];
   delay?: number;
   id?: string;
+  clip?: boolean;
+  immediate?: boolean;
 };
 
 export function MaskReveal({
@@ -21,10 +23,13 @@ export function MaskReveal({
   lineClassName,
   delay = 0,
   id,
+  clip = false,
+  immediate = false,
 }: MaskRevealProps) {
   const reduce = useReducedMotion();
-  const { ref, visible } = useReveal(reduce);
+  const { ref, visible } = useReveal(reduce, immediate);
   const Tag = motion[as];
+  const shown = visible || reduce;
 
   return (
     <Tag id={id} ref={ref} className={cn("leading-tight", className)}>
@@ -34,11 +39,22 @@ export function MaskReveal({
           : lineClassName;
 
         return (
-          <span key={`${line}-${index}`} className="block overflow-hidden py-[0.08em]">
+          <span
+            key={`${line}-${index}`}
+            className={cn("block", clip && "overflow-hidden py-[0.08em]")}
+          >
             <motion.span
               className={cn("block", lineStyles)}
-              initial={reduce ? false : { y: "100%" }}
-              animate={reduce || visible ? { y: "0%" } : { y: "100%" }}
+              initial={reduce ? false : clip ? { y: "100%" } : { opacity: 0, y: 10 }}
+              animate={
+                shown
+                  ? clip
+                    ? { y: "0%" }
+                    : { opacity: 1, y: 0 }
+                  : clip
+                    ? { y: "100%" }
+                    : { opacity: 0, y: 10 }
+              }
               transition={{
                 duration: duration.text,
                 ease: easeEnter,

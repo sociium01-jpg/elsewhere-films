@@ -6,20 +6,16 @@ import { useEffect, useRef, useState } from "react";
 function intersectsViewport(node: Element) {
   const rect = node.getBoundingClientRect();
   const vh = window.innerHeight || 1;
-  return rect.bottom > 40 && rect.top < vh - 40;
+  return rect.bottom > 24 && rect.top < vh - 24;
 }
 
-export function useReveal(reduce: boolean | null) {
+export function useReveal(reduce: boolean | null, immediate = false) {
   const ref = useRef(null);
-  const inView = useInView(ref, { once: true, amount: 0.15, margin: "0px 0px -48px 0px" });
-  const [visible, setVisible] = useState(Boolean(reduce));
+  const inView = useInView(ref, { once: true, amount: 0.12, margin: "0px 0px -24px 0px" });
+  const [visible, setVisible] = useState(Boolean(reduce) || immediate);
 
   useEffect(() => {
-    if (reduce) {
-      setVisible(true);
-      return;
-    }
-    if (inView) {
+    if (reduce || immediate || inView) {
       setVisible(true);
       return;
     }
@@ -29,18 +25,16 @@ export function useReveal(reduce: boolean | null) {
     };
 
     check();
-    const a = window.setTimeout(check, 250);
-    const b = window.setTimeout(check, 900);
+    const id = window.setTimeout(check, 200);
     window.addEventListener("scroll", check, { passive: true });
     window.addEventListener("resize", check);
 
     return () => {
-      window.clearTimeout(a);
-      window.clearTimeout(b);
+      window.clearTimeout(id);
       window.removeEventListener("scroll", check);
       window.removeEventListener("resize", check);
     };
-  }, [inView, reduce]);
+  }, [immediate, inView, reduce]);
 
   return { ref, visible };
 }

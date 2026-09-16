@@ -16,34 +16,29 @@ export function SplitChars({
   text,
   className,
   delay = 0,
-  stagger = 0.028,
+  stagger = 0.02,
 }: SplitCharsProps) {
   const reduce = useReducedMotion();
   const { ref, visible } = useReveal(reduce);
   const chars = Array.from(text);
+  const shown = reduce || visible;
 
   return (
     <span ref={ref} className={cn("inline", className)}>
       {chars.map((char, index) => (
-        <span
+        <motion.span
           key={`${char}-${index}`}
-          className="inline-block overflow-hidden align-baseline leading-[1.35]"
+          className="inline-block"
+          initial={reduce ? false : { opacity: 0, y: 8 }}
+          animate={shown ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 }}
+          transition={{
+            duration: duration.text,
+            ease: easeEnter,
+            delay: delay + index * stagger,
+          }}
         >
-          <motion.span
-            className="inline-block will-change-transform"
-            initial={reduce ? false : { y: "110%", opacity: 0 }}
-            animate={
-              reduce || visible ? { y: "0%", opacity: 1 } : { y: "110%", opacity: 0 }
-            }
-            transition={{
-              duration: duration.text,
-              ease: easeEnter,
-              delay: delay + index * stagger,
-            }}
-          >
-            {char === " " ? "\u00A0" : char}
-          </motion.span>
-        </span>
+          {char === " " ? "\u00A0" : char}
+        </motion.span>
       ))}
     </span>
   );

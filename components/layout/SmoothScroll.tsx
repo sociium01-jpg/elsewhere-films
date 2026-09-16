@@ -14,8 +14,13 @@ export function SmoothScroll() {
   useEffect(() => {
     if (reduce) return;
 
+    const coarse =
+      window.matchMedia("(pointer: coarse)").matches ||
+      window.matchMedia("(hover: none)").matches;
+    if (coarse) return;
+
     const lenis = new Lenis({
-      duration: 1.35,
+      duration: 1.15,
       smoothWheel: true,
       wheelMultiplier: 0.88,
     });

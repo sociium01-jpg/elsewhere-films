@@ -1,6 +1,7 @@
 "use client";
 
 import { Facebook, Instagram, Youtube } from "lucide-react";
+import { BrandMark } from "@/components/brand/BrandMark";
 import { ConversationButton } from "@/components/layout/ConversationButton";
 import { Wordmark } from "@/components/layout/Wordmark";
 
@@ -22,7 +23,7 @@ const SOCIALS = [
 export function Footer() {
   return (
     <footer className="border-t border-ink-charcoal/10 bg-ink-offWhite">
-      <div className="mx-auto flex max-w-frame flex-col gap-10 px-5 py-16 md:flex-row md:items-end md:justify-between md:px-10 md:py-20 lg:px-14">
+      <div className="mx-auto flex max-w-frame flex-col gap-10 px-5 py-16 md:flex-row md:items-center md:justify-between md:px-10 md:py-20 lg:px-14">
         <div>
           <Wordmark variant="onLight" />
           <p className="mt-6 font-display text-[11px] font-semibold uppercase tracking-[0.2em] text-ink-charcoal">
@@ -46,11 +47,12 @@ export function Footer() {
               </li>
             ))}
           </ul>
+          <ConversationButton variant="light" className="mt-8" />
         </div>
-        <ConversationButton variant="light" className="self-start md:self-auto" />
+        <BrandMark className="pointer-events-none h-[4.75rem] w-auto shrink-0 self-end md:h-44 lg:h-48" />
       </div>
 
-      <div className="bg-ink-white px-5 py-3 md:px-10 lg:px-14">
+      <div className="bg-ink-white px-5 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] md:px-10 lg:px-14">
         <p className="text-center font-body text-[11px] tracking-body text-ink-grey">
           © 2026 ELSEWHEREFILMS. All rights reserved
         </p>
