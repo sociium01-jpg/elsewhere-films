@@ -8,7 +8,7 @@ import { duration, easeEnter } from "@/lib/motion";
 export function PageFade({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const reduce = useReducedMotion();
-  const [ms, setMs] = useState(duration.page);
+  const [ms, setMs] = useState<number>(duration.page);
 
   useEffect(() => {
     const fine = window.matchMedia("(pointer: fine)").matches;
