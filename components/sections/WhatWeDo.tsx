@@ -2,20 +2,21 @@ import Link from "next/link";
 import { OfferingMark } from "@/components/brand/OfferingMark";
 import { FadeUp } from "@/components/motion/FadeUp";
 import { RevealGroup } from "@/components/motion/RevealGroup";
+import { textCtaLift } from "@/lib/button";
 import { cn } from "@/lib/cn";
 import { HOME, OFFERINGS_HOME } from "@/lib/copy";
 
 export function WhatWeDo() {
   return (
     <section className="bg-ink-offWhite" aria-labelledby="what-heading">
-      <div className="mx-auto max-w-frame px-5 py-24 md:px-10 md:py-32 lg:px-14">
-        <p className="font-display text-[11px] font-semibold uppercase tracking-[0.28em] text-brand-red">
+      <div className="mx-auto grid max-w-frame gap-0 px-5 py-24 md:px-10 md:py-32 lg:grid-cols-12 lg:px-14">
+        <p className="font-display text-[11px] font-semibold uppercase tracking-[0.28em] text-brand-red lg:col-span-12">
           What we do
         </p>
-        <FadeUp>
+        <FadeUp className="lg:col-span-10 xl:col-span-8">
           <h2
             id="what-heading"
-            className="mt-6 max-w-[36ch] font-display text-[18px] font-semibold leading-snug tracking-caps text-ink-charcoal md:text-[22px]"
+            className="mt-6 max-w-lede font-display text-[18px] font-semibold leading-snug tracking-display text-ink-charcoal md:text-[22px]"
           >
             {HOME.whatWeDo.intro}
           </h2>
@@ -23,7 +24,7 @@ export function WhatWeDo() {
 
         <RevealGroup
           as="ul"
-          className="mt-14 grid gap-4 md:grid-cols-2"
+          className="mt-14 grid gap-4 md:grid-cols-2 lg:col-span-12"
         >
           {OFFERINGS_HOME.map((offering, index) => {
             const isCoProduction = offering.name === "Co-production";
@@ -36,18 +37,18 @@ export function WhatWeDo() {
               >
                 <article
                   className={cn(
-                    "h-full border border-ink-charcoal/10 px-6 py-7 md:px-8 md:transition-transform md:duration-300 md:ease-enter md:hover:-translate-y-1",
+                    "h-full border border-ink-charcoal/10 px-6 py-7 md:px-8 md:transition-transform md:duration-300 md:ease-enter md:hover:-translate-y-1 motion-reduce:transform-none",
                     isCoProduction ? "bg-transparent" : "bg-ink-white",
                   )}
                 >
                   <p className="font-display text-[12px] font-semibold tracking-[0.18em] text-brand-red">
                     {String(index + 1).padStart(2, "0")}
                   </p>
-                  <h3 className="mt-3 font-display text-[15px] font-bold tracking-caps text-ink-charcoal md:text-[17px]">
+                  <h3 className="mt-3 font-display text-[15px] font-bold tracking-display text-ink-charcoal md:text-[17px]">
                     {offering.name}
                   </h3>
                   <OfferingMark delay={index * 0.06} />
-                  <p className="mt-4 max-w-[54ch] font-body text-[14px] font-light leading-body tracking-body text-ink-charcoal md:text-[15px]">
+                  <p className="mt-4 max-w-measure font-body text-[14px] font-light leading-body tracking-body text-ink-charcoal md:text-[15px]">
                     {offering.body}
                   </p>
                 </article>
@@ -56,10 +57,13 @@ export function WhatWeDo() {
           })}
         </RevealGroup>
 
-        <FadeUp delay={0.12} className="mt-10">
+        <FadeUp delay={0.12} className="mt-10 lg:col-span-12">
           <Link
             href="/services"
-            className="inline-flex min-h-11 items-center font-display text-[12px] font-semibold uppercase tracking-[0.16em] text-ink-charcoal underline decoration-brand-red decoration-1 underline-offset-8"
+            className={cn(
+              "inline-flex min-h-11 items-center font-display text-[12px] font-semibold uppercase tracking-[0.16em] text-ink-charcoal underline decoration-brand-red decoration-1 underline-offset-8",
+              textCtaLift,
+            )}
           >
             {HOME.whatWeDo.seeHow} →
           </Link>

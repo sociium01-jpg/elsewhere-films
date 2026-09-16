@@ -166,6 +166,11 @@ export const KNOWLEDGE_HUB = {
   title: "Knowledge Hub",
   framing:
     "Publications and The After Cut are the open, public side of our pathway work.",
+  shelves: [
+    { name: "Articles & white papers", items: [] as const },
+    { name: "The After Cut podcast", items: [] as const },
+    { name: "Annual reports", items: [] as const },
+  ],
 } as const;
 
 export const ABOUT = {

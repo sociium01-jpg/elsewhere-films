@@ -44,11 +44,11 @@ export function PageHero({
           as="h1"
           mode="lines"
           text={title}
-          className="max-w-[16ch] font-display text-[32px] font-bold uppercase leading-tight tracking-caps text-ink-white md:text-[48px] lg:text-[56px]"
+          className="max-w-[22ch] font-display text-[32px] font-bold uppercase leading-tight tracking-caps text-ink-white md:text-[48px] lg:text-[56px]"
         />
         <DashedRule className="mx-0 mt-5" />
         {subtitle ? (
-          <p className="mt-6 max-w-[46ch] font-body text-[15px] font-light leading-body tracking-body text-ink-offWhite">
+          <p className="mt-6 max-w-lede font-body text-[15px] font-light leading-body tracking-body text-ink-offWhite">
             {subtitle}
           </p>
         ) : null}

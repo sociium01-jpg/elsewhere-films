@@ -32,7 +32,7 @@ export function MaskReveal({
   const shown = visible || reduce;
 
   return (
-    <Tag id={id} ref={ref} className={cn("leading-tight", className)}>
+    <Tag id={id} ref={ref} className={cn("leading-snug", className)}>
       {lines.map((line, index) => {
         const lineStyles = Array.isArray(lineClassName)
           ? lineClassName[index]
@@ -41,7 +41,10 @@ export function MaskReveal({
         return (
           <span
             key={`${line}-${index}`}
-            className={cn("block", clip && "overflow-hidden py-[0.08em]")}
+            className={cn(
+              "block",
+              clip && "overflow-hidden py-[0.18em]",
+            )}
           >
             <motion.span
               className={cn("block", lineStyles)}

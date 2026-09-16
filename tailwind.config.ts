@@ -50,11 +50,12 @@ const config: Config = {
       },
       letterSpacing: {
         caps: "0.12em",
-        body: "0.06em",
-        capsMobile: "0.08em",
+        display: "0.02em",
+        body: "0.04em",
+        capsMobile: "0.06em",
       },
       lineHeight: {
-        body: "1.9",
+        body: "1.75",
       },
       transitionTimingFunction: {
         enter: "cubic-bezier(0.22, 1, 0.36, 1)",
@@ -62,6 +63,8 @@ const config: Config = {
       },
       maxWidth: {
         frame: "1440px",
+        measure: "66ch",
+        lede: "58ch",
       },
     },
   },

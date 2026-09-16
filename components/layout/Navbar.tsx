@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Wordmark } from "@/components/layout/Wordmark";
 import { ConversationButton } from "@/components/layout/ConversationButton";
+import { buttonLift } from "@/lib/button";
 import { cn } from "@/lib/cn";
 import { duration, easeEnter, stagger } from "@/lib/motion";
 import { NAV_LINKS } from "@/lib/nav";
@@ -97,7 +98,10 @@ export function Navbar() {
 
         <button
           type="button"
-          className="relative z-[90] flex h-11 w-11 items-center justify-center rounded-full border border-ink-white/20 lg:hidden focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-red"
+          className={cn(
+            "relative z-[90] flex h-11 w-11 items-center justify-center rounded-full border border-ink-white/20 lg:hidden focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-red",
+            buttonLift,
+          )}
           aria-expanded={open}
           aria-controls="app-menu"
           onClick={() => setOpen((value) => !value)}

@@ -4,6 +4,7 @@ import { AnimatePresence, motion, useDragControls, useReducedMotion } from "fram
 import { FormEvent, useEffect, useId, useState, type PointerEvent } from "react";
 import { Wordmark } from "@/components/layout/Wordmark";
 import { useConversation } from "@/lib/conversation";
+import { buttonLift } from "@/lib/button";
 import { CTA, ENGAGEMENT_LINE, FILM_STAGES } from "@/lib/copy";
 import { cn } from "@/lib/cn";
 import { duration, easeEnter } from "@/lib/motion";
@@ -171,7 +172,10 @@ export function ConversationPanel() {
 
               <button
                 type="submit"
-                className="mt-2 inline-flex min-h-11 items-center self-start rounded-full bg-brand-red px-7 font-display text-[11px] font-semibold uppercase tracking-[0.18em] text-ink-white hover:bg-brand-redDeep"
+                className={cn(
+                  "mt-2 inline-flex min-h-11 items-center self-start rounded-full bg-brand-red px-7 font-display text-[11px] font-semibold uppercase tracking-[0.18em] text-ink-white hover:bg-brand-redDeep",
+                  buttonLift,
+                )}
               >
                 {CTA}
               </button>

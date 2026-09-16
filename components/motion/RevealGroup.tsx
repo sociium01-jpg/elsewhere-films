@@ -9,7 +9,7 @@ import { useReveal } from "@/lib/use-reveal";
 type RevealGroupProps = {
   children: ReactNode;
   className?: string;
-  as?: "div" | "ul" | "section";
+  as?: "div" | "ul" | "ol" | "section";
   stagger?: number;
   delayChildren?: number;
 };

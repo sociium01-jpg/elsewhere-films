@@ -23,13 +23,13 @@ const SOCIALS = [
 export function Footer() {
   return (
     <footer className="border-t border-ink-charcoal/10 bg-ink-offWhite">
-      <div className="mx-auto flex max-w-frame flex-col gap-10 px-5 py-16 md:flex-row md:items-center md:justify-between md:px-10 md:py-20 lg:px-14">
-        <div>
+      <div className="mx-auto grid max-w-frame gap-10 px-5 py-16 md:grid-cols-12 md:items-end md:gap-8 md:px-10 md:py-20 lg:px-14">
+        <div className="md:col-span-6 lg:col-span-5">
           <Wordmark variant="onLight" />
           <p className="mt-6 font-display text-[11px] font-semibold uppercase tracking-[0.2em] text-ink-charcoal">
             Elsewhere Films · Hyderabad
           </p>
-          <p className="mt-3 font-body text-[13px] font-light leading-relaxed tracking-body text-ink-charcoal">
+          <p className="mt-3 max-w-[36ch] font-body text-[13px] font-light leading-relaxed tracking-body text-ink-charcoal">
             9th Floor, Vamsiram Jyothi Granules,
             <br />
             Kondapur, Hyderabad
@@ -49,7 +49,7 @@ export function Footer() {
           </ul>
           <ConversationButton variant="light" className="mt-8" />
         </div>
-        <BrandMark className="pointer-events-none h-[4.75rem] w-auto shrink-0 self-end md:h-44 lg:h-48" />
+        <BrandMark className="pointer-events-none h-[4.75rem] w-auto shrink-0 self-end md:col-span-5 md:col-start-8 md:h-44 md:justify-self-end lg:col-span-4 lg:col-start-9 lg:h-48" />
       </div>
 
       <div className="bg-ink-white px-5 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] md:px-10 lg:px-14">
