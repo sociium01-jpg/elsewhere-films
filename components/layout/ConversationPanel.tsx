@@ -8,6 +8,7 @@ import { buttonLift } from "@/lib/button";
 import { CTA, ENGAGEMENT_LINE, FILM_STAGES } from "@/lib/copy";
 import { cn } from "@/lib/cn";
 import { duration, easeEnter } from "@/lib/motion";
+import { submitContact } from "@/lib/submit-contact";
 
 const FIELD =
   "mt-1 min-h-11 w-full border-0 border-b border-ink-charcoal/30 bg-transparent py-2 font-body text-[14px] text-ink-charcoal outline-none ring-0 placeholder:text-ink-grey focus:border-brand-red";
@@ -16,7 +17,10 @@ export function ConversationPanel() {
   const { open, setOpen } = useConversation();
   const titleId = useId();
   const reduce = useReducedMotion();
-  const [status, setStatus] = useState<"idle" | "sent">("idle");
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">(
+    "idle",
+  );
+  const [errorMessage, setErrorMessage] = useState("");
   const [desktop, setDesktop] = useState(() =>
     typeof window !== "undefined" && window.matchMedia("(min-width: 768px)").matches,
   );
@@ -34,6 +38,7 @@ export function ConversationPanel() {
   useEffect(() => {
     if (!open) {
       setStatus("idle");
+      setErrorMessage("");
       return;
     }
     const onKey = (event: KeyboardEvent) => {
@@ -47,10 +52,33 @@ export function ConversationPanel() {
     };
   }, [open, setOpen]);
 
-  function onSubmit(event: FormEvent<HTMLFormElement>) {
+  async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (status === "sending") return;
+
+    const form = event.currentTarget;
+    const data = new FormData(form);
+    setStatus("sending");
+    setErrorMessage("");
+
+    const result = await submitContact({
+      name: String(data.get("name") ?? ""),
+      email: String(data.get("email") ?? ""),
+      filmTitle: String(data.get("filmTitle") ?? ""),
+      stage: String(data.get("stage") ?? ""),
+      oneLine: String(data.get("oneLine") ?? ""),
+      screener: String(data.get("screener") ?? ""),
+      "bot-field": String(data.get("bot-field") ?? ""),
+    });
+
+    if (!result.ok) {
+      setStatus("error");
+      setErrorMessage(result.error);
+      return;
+    }
+
     setStatus("sent");
-    event.currentTarget.reset();
+    form.reset();
   }
 
   return (
@@ -130,6 +158,13 @@ export function ConversationPanel() {
                 {ENGAGEMENT_LINE}
               </p>
 
+              <p className="hidden" aria-hidden="true">
+                <label>
+                  Do not fill this out:{" "}
+                  <input name="bot-field" tabIndex={-1} autoComplete="off" />
+                </label>
+              </p>
+
               <label className="block font-body text-[12px] tracking-body text-ink-charcoal">
                 Name
                 <input type="text" name="name" required autoComplete="name" className={FIELD} />
@@ -172,17 +207,23 @@ export function ConversationPanel() {
 
               <button
                 type="submit"
+                disabled={status === "sending"}
                 className={cn(
-                  "mt-2 inline-flex min-h-11 items-center self-start rounded-full bg-brand-red px-7 font-display text-[11px] font-semibold uppercase tracking-[0.18em] text-ink-white hover:bg-brand-redDeep",
+                  "mt-2 inline-flex min-h-11 items-center self-start rounded-full bg-brand-red px-7 font-display text-[11px] font-semibold uppercase tracking-[0.18em] text-ink-white hover:bg-brand-redDeep disabled:opacity-60",
                   buttonLift,
                 )}
               >
-                {CTA}
+                {status === "sending" ? "Sending" : CTA}
               </button>
 
               {status === "sent" ? (
                 <p className="font-body text-[13px] text-ink-charcoal">
                   Thank you. We&apos;ll be in touch.
+                </p>
+              ) : null}
+              {status === "error" ? (
+                <p className="font-body text-[13px] text-brand-red" role="alert">
+                  {errorMessage || "Something went wrong. Please try again."}
                 </p>
               ) : null}
             </form>
