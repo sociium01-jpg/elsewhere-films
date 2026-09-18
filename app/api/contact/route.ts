@@ -5,7 +5,9 @@ export const dynamic = "force-dynamic";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const RESEND_ENDPOINT = "https://api.resend.com/emails";
+const WEB3FORMS_ENDPOINT = "https://api.web3forms.com/submit";
 const DEFAULT_FROM = "Elsewhere Films <onboarding@resend.dev>";
+const DEFAULT_TO = "am@sociium.in";
 const RATE_WINDOW_MS = 60_000;
 const RATE_MAX = 8;
 const HONEYPOT_KEYS = ["bot-field", "honeypot", "company", "website"] as const;
@@ -148,6 +150,10 @@ function validate(raw: Record<string, unknown>): ContactFields | string {
   return { name, email, filmTitle, stage, oneLine, screener, message };
 }
 
+function destinationEmail(): string {
+  return process.env.CONTACT_TO_EMAIL?.trim() || DEFAULT_TO;
+}
+
 function formatText(fields: ContactFields): string {
   const lines = [`Name: ${fields.name}`, `Email: ${fields.email}`];
   if (fields.filmTitle) lines.push(`Film title: ${fields.filmTitle}`);
@@ -158,18 +164,46 @@ function formatText(fields: ContactFields): string {
   return lines.join("\n");
 }
 
+function subjectFor(fields: ContactFields): string {
+  return fields.filmTitle
+    ? `Elsewhere conversation: ${sanitizeHeader(fields.filmTitle)}`
+    : `Elsewhere contact: ${sanitizeHeader(fields.name)}`;
+}
+
+function deliveryFields(fields: ContactFields): Record<string, string> {
+  const payload: Record<string, string> = {
+    name: fields.name,
+    email: fields.email,
+    subject: subjectFor(fields),
+    message: fields.message || formatText(fields),
+  };
+  if (fields.filmTitle) payload.filmTitle = fields.filmTitle;
+  if (fields.stage) payload.stage = fields.stage;
+  if (fields.oneLine) payload.oneLine = fields.oneLine;
+  if (fields.screener) payload.screener = fields.screener;
+  if (fields.message) payload.details = formatText(fields);
+  return payload;
+}
+
+async function readJsonSafe(response: Response): Promise<Record<string, unknown> | null> {
+  const parsed: unknown = await response.json().catch(() => null);
+  if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) return null;
+  return parsed as Record<string, unknown>;
+}
+
+function deliveryRejected(response: Response, result: Record<string, unknown> | null): boolean {
+  if (!response.ok) return true;
+  if (result?.success === false || result?.ok === false) return true;
+  return false;
+}
+
 async function sendWithResend(fields: ContactFields) {
   const apiKey = process.env.RESEND_API_KEY?.trim();
-  const to = process.env.CONTACT_TO_EMAIL?.trim() || "am@sociium.in";
   const from = process.env.CONTACT_FROM_EMAIL?.trim() || DEFAULT_FROM;
 
   if (!apiKey) {
     throw new Error("unconfigured");
   }
-
-  const subject = fields.filmTitle
-    ? `Elsewhere conversation: ${sanitizeHeader(fields.filmTitle)}`
-    : `Elsewhere contact: ${sanitizeHeader(fields.name)}`;
 
   const response = await fetch(RESEND_ENDPOINT, {
     method: "POST",
@@ -179,15 +213,43 @@ async function sendWithResend(fields: ContactFields) {
     },
     body: JSON.stringify({
       from,
-      to: [to],
+      to: [destinationEmail()],
       reply_to: fields.email,
-      subject,
+      subject: subjectFor(fields),
       text: formatText(fields),
     }),
   });
 
   if (!response.ok) {
     console.error("Resend rejected the contact email", response.status);
+    throw new Error("delivery");
+  }
+}
+
+async function sendWithWeb3Forms(fields: ContactFields) {
+  const accessKey = process.env.WEB3FORMS_ACCESS_KEY?.trim();
+  if (!accessKey) {
+    throw new Error("unconfigured");
+  }
+
+  const response = await fetch(WEB3FORMS_ENDPOINT, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      access_key: accessKey,
+      from_name: fields.name,
+      replyto: fields.email,
+      to: destinationEmail(),
+      ...deliveryFields(fields),
+    }),
+  });
+
+  const result = await readJsonSafe(response);
+  if (deliveryRejected(response, result) || result?.success !== true) {
+    console.error("Web3Forms rejected the contact submission", response.status);
     throw new Error("delivery");
   }
 }
@@ -201,33 +263,28 @@ async function forwardToEndpoint(endpoint: string, fields: ContactFields) {
   }
 
   const payload: Record<string, string> = {
-    name: fields.name,
-    email: fields.email,
+    ...deliveryFields(fields),
+    _replyto: fields.email,
+    _subject: subjectFor(fields),
   };
-  if (fields.filmTitle) payload.filmTitle = fields.filmTitle;
-  if (fields.stage) payload.stage = fields.stage;
-  if (fields.oneLine) payload.oneLine = fields.oneLine;
-  if (fields.screener) payload.screener = fields.screener;
-  if (fields.message) payload.message = fields.message;
   url.searchParams.forEach((value, key) => {
     payload[key] = value;
   });
 
-  const target = `${url.origin}${url.pathname}`;
   const web3 = url.hostname.includes("web3forms");
+  const target = `${url.origin}${url.pathname}`;
 
   const response = await fetch(target, {
     method: "POST",
-    headers: web3
-      ? { Accept: "application/json", "Content-Type": "application/json" }
-      : {
-          Accept: "application/json",
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-    body: web3 ? JSON.stringify(payload) : new URLSearchParams(payload).toString(),
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
   });
 
-  if (!response.ok) {
+  const result = await readJsonSafe(response);
+  if (deliveryRejected(response, result) || (web3 && result?.success !== true)) {
     console.error("Contact form endpoint rejected the submission", response.status);
     throw new Error("delivery");
   }
@@ -259,11 +316,14 @@ export async function POST(request: NextRequest) {
   }
 
   const resendKey = process.env.RESEND_API_KEY?.trim();
+  const web3Key = process.env.WEB3FORMS_ACCESS_KEY?.trim();
   const fallback = process.env.CONTACT_FORM_ENDPOINT?.trim();
 
   try {
     if (resendKey) {
       await sendWithResend(fields);
+    } else if (web3Key) {
+      await sendWithWeb3Forms(fields);
     } else if (fallback) {
       await forwardToEndpoint(fallback, fields);
     } else {
