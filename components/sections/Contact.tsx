@@ -5,6 +5,7 @@ import { FormEvent, useState } from "react";
 import { DashedRule } from "@/components/brand/DashedRule";
 import { AnimatedHeading } from "@/components/motion/AnimatedHeading";
 import { SplitWords } from "@/components/motion/SplitWords";
+import { submitContact } from "@/lib/submit-contact";
 
 const FIELD =
   "w-full border-0 border-b border-ink-white bg-transparent py-2 font-body text-[14px] text-ink-white outline-none ring-0 placeholder:text-ink-white/30 focus:border-brand-red";
@@ -13,30 +14,32 @@ export function Contact() {
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">(
     "idle",
   );
+  const [errorMessage, setErrorMessage] = useState("");
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (status === "sending") return;
+
     const form = event.currentTarget;
     const data = new FormData(form);
-    data.set("form-name", "contact");
     setStatus("sending");
+    setErrorMessage("");
 
-    try {
-      const params = new URLSearchParams();
-      data.forEach((value, key) => {
-        if (typeof value === "string") params.append(key, value);
-      });
-      const response = await fetch("/__forms.html", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: params.toString(),
-      });
-      if (!response.ok) throw new Error("Form error");
-      setStatus("sent");
-      form.reset();
-    } catch {
+    const result = await submitContact({
+      name: String(data.get("name") ?? ""),
+      email: String(data.get("email") ?? ""),
+      message: String(data.get("message") ?? ""),
+      "bot-field": String(data.get("bot-field") ?? ""),
+    });
+
+    if (!result.ok) {
       setStatus("error");
+      setErrorMessage(result.error);
+      return;
     }
+
+    setStatus("sent");
+    form.reset();
   }
 
   return (
@@ -70,21 +73,25 @@ export function Contact() {
         <form
           name="contact"
           method="POST"
-          data-netlify="true"
-          netlify-honeypot="bot-field"
           onSubmit={onSubmit}
           className="mt-12 max-w-[420px] space-y-8"
         >
-          <input type="hidden" name="form-name" value="contact" />
-          <p className="hidden">
+          <p className="hidden" aria-hidden="true">
             <label>
-              Don’t fill this out: <input name="bot-field" />
+              Do not fill this out:{" "}
+              <input name="bot-field" tabIndex={-1} autoComplete="off" />
             </label>
           </p>
 
           <label className="block font-body text-[13px] tracking-body text-ink-white">
             Your Lovely Name:
-            <input type="text" name="name" autoComplete="name" className={FIELD} />
+            <input
+              type="text"
+              name="name"
+              required
+              autoComplete="name"
+              className={FIELD}
+            />
           </label>
           <label className="block font-body text-[13px] tracking-body text-ink-white">
             E-Mail: *
@@ -115,8 +122,8 @@ export function Contact() {
             </p>
           ) : null}
           {status === "error" ? (
-            <p className="font-body text-[13px] text-brand-redSoft">
-              Something went wrong. Please try again.
+            <p className="font-body text-[13px] text-brand-redSoft" role="alert">
+              {errorMessage || "Something went wrong. Please try again."}
             </p>
           ) : null}
         </form>
