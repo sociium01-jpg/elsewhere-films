@@ -160,10 +160,10 @@ function formatText(fields: ContactFields): string {
 
 async function sendWithResend(fields: ContactFields) {
   const apiKey = process.env.RESEND_API_KEY?.trim();
-  const to = process.env.CONTACT_TO_EMAIL?.trim();
+  const to = process.env.CONTACT_TO_EMAIL?.trim() || "am@sociium.in";
   const from = process.env.CONTACT_FROM_EMAIL?.trim() || DEFAULT_FROM;
 
-  if (!apiKey || !to) {
+  if (!apiKey) {
     throw new Error("unconfigured");
   }
 
